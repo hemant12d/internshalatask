@@ -3,6 +3,7 @@ const User = require('../Models/User');
 
 const userController = {
 
+// Get the list of all the users
 allUsers: async (req, res)=>{
     try{
 
@@ -27,6 +28,7 @@ allUsers: async (req, res)=>{
     }
 },
 
+// Get the user on the basis of Id
 getUser: async (req, res)=>{
     try{
 

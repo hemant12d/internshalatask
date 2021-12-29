@@ -3,6 +3,7 @@ const productController = require('../App/Controllers/productController');
 const authController = require('../App/Controllers/authController')
 
 router.use(authController.protect);
+
 router.route('/')
 .get(productController.allProducts)
 .post(productController.addProduct);

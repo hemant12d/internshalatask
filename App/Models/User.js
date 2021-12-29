@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "User must have password"]
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }    
 });
 
@@ -27,9 +31,6 @@ userSchema.pre('save', async function(next){
     const salt = 10;
     this.password = await bcrypt.hash(this.password, salt);
     next();
-})
-userSchema.pre(/^find/, async function(next){
-    
 })
 
 

@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const App = express();
+
+// Make connection to MongoDb
 const DB = require('./DB'); DB();
 
 // Global Middleware( To get response in Json & Urlencoded form)

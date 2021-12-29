@@ -1,6 +1,8 @@
 const Product = require('../Models/Product');
 
 const productController = {
+
+    // Added prodect to database
     addProduct: async (req, res)=>{
     
     try{
@@ -28,6 +30,7 @@ const productController = {
 
     },
 
+    // Get the list of all the products
     allProducts: async (req, res)=>{
         try{
 
@@ -52,6 +55,7 @@ const productController = {
         }
     }, 
 
+    // Get particular single product
     getProduct: async (req, res)=>{
         try{
 

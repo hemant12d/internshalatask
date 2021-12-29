@@ -22,7 +22,11 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "User",
         required: [true, "Product must be belong to user"]
-    }    
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }  
 });
 
 
