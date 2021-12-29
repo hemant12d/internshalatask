@@ -1,6 +1,7 @@
+require('dotenv').config();
+const { promisify } = require('util');
 const User = require('../Models/User');
 const jwt = require('jsonwebtoken')
-require('dotenv').config();
 
 const authController = {
 
@@ -114,42 +115,35 @@ login: async (req, res)=>{
    
 },
 
-allUsers: async (req, res)=>{
+
+// Protect routes if user is not logged in
+protect: async (req, res, next) => {
+
     try{
+       
+        let jwtToken;
 
-        const users = await User.find().select('-password');
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer'))
+            jwtToken = req.headers.authorization.split(' ')[1];
 
-        return res.status(200).json({
-            status: "success",
-            totalResult: users.length,
-            data:{
-                users
-            }
-        })
+        // check if token exists or not
+        if (!jwtToken){
+            return res.status(404).json({
+                status: 'fail',
+                message: "User is not logged in, Please login for continue"
+            })
+        }
 
-    }
-     catch(error){
-        return res.status(404).json({
-            status: 'fail',
-            msg: error.message,
-            errorStack: error.stack,
-            error: error
-        })
-    }
-},
+        // Varification of Token
+        const decodeToken = await promisify(jwt.verify)(jwtToken, process.env.APP_SECRET_KEY);
 
-getUser: async (req, res)=>{
-    try{
+        // Get current user
+        const freshUser = await User.findById(decodeToken.id);
 
-        const user = await User.findById(req.params.id).select('-password');
 
-        return res.status(200).json({
-            status: "success",
-            data:{
-                user
-            }
-        })
-
+        // ACCESS GRANTED
+        req.user = freshUser;
+        next();
     }
     catch(error){
         return res.status(404).json({
@@ -159,6 +153,7 @@ getUser: async (req, res)=>{
             error: error
         })
     }
+    
 },
 
 

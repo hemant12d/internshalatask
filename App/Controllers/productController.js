@@ -5,6 +5,8 @@ const productController = {
     
     try{
 
+        req.body._createdBy = req.user._id;
+
         const product = await Product.create(req.body);
 
         return res.status(200).json({
@@ -25,6 +27,7 @@ const productController = {
     }
 
     },
+
     allProducts: async (req, res)=>{
         try{
 
@@ -35,6 +38,29 @@ const productController = {
                 totalResult: products.length,
                 data:{
                     products
+                }
+            })
+
+        }
+        catch(error){
+            return res.status(404).json({
+                status: 'fail',
+                msg: error.message,
+                errorStack: error.stack,
+                error: error
+            })
+        }
+    }, 
+
+    getProduct: async (req, res)=>{
+        try{
+
+            const product = await Product.findById(req.params.id);
+
+            return res.status(200).json({
+                status: "success",
+                data:{
+                    product
                 }
             })
 
